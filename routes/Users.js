@@ -31,7 +31,7 @@ router.post("/login", async (req, res) => {
       { username: user.username, id: user.id },
       "KimetsuNoYaiba"
     );
-    res.json(accessToken);
+    res.json({ token: accessToken, username: username, id: user.id });
   });
 });
 
