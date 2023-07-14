@@ -1,15 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { Posts } = require("../models");
+const { Posts, Likes } = require("../models");
+const { validateToken } = require("../middlewares/Authmiddleware");
 
 router.get("/", async (req, res) => {
-  const listOfPosts = await Posts.findAll();
+  const listOfPosts = await Posts.findAll({include: [Likes]});  //joining posts and likes table
   res.json(listOfPosts);
 });
 
 router.get("/postById/:id", async (req, res) => {
   const id = req.params.id;
-  const post = await Posts.findByPk(id);
+  const post = await Posts.findByPk(id, {include: [Likes]});
   res.json(post);
 });
 
@@ -41,7 +42,7 @@ const upload = multer({
     }
 })
 
-router.post('/posts', upload.single('image'), async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
   try {
     const post = req.body;
     const { filename } = req.file;
@@ -54,5 +55,33 @@ router.post('/posts', upload.single('image'), async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+router.put('/update',validateToken, upload.single('image'), async (req, res) => {
+  try {
+    const id = req.body.id;
+    const updatedPost  = req.body;
+    const { filename } = req.file;
+
+    await Posts.update({ ...updatedPost, image: filename }, {where : {id: id}});
+
+    res.status(201).json(updatedPost);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+router.delete("/:postId",validateToken, async (req, res) => {
+  const postId = req.params.postId;
+  await Posts.destroy({
+    where: {
+      id: postId,
+    },
+  });
+
+  res.json("DELETED SUCCESSFULLY");
+});
+
+
 
 module.exports = router;
