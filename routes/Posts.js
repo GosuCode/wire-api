@@ -56,20 +56,23 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-router.put('/update',validateToken, upload.single('image'), async (req, res) => {
+
+router.put('/updatePost/:id',upload.single('image'), async (req, res) => {
+  const id = req.params.id;
+
   try {
-    const id = req.body.id;
-    const updatedPost  = req.body;
-    const { filename } = req.file;
+    const post = req.body;
+    const filename = req.file ? req.file.filename : null;
+    const updatedPost = await Posts.update({...post, image: filename}, { where: { id } });
 
-    await Posts.update({ ...updatedPost, image: filename }, {where : {id: id}});
-
-    res.status(201).json(updatedPost);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(200).send(updatedPost)
+    return res.json({ message: 'Post updated successfully' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Error updating post' });
   }
 });
+
 
 router.delete("/:postId",validateToken, async (req, res) => {
   const postId = req.params.postId;
