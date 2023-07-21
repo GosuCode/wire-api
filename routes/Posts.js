@@ -65,7 +65,6 @@ router.put('/updatePost/:id',upload.single('image'), async (req, res) => {
     const filename = req.file ? req.file.filename : null;
     const updatedPost = await Posts.update({...post, image: filename}, { where: { id } });
 
-    res.status(200).send(updatedPost)
     return res.json({ message: 'Post updated successfully' });
   } catch (err) {
     console.error(err);
