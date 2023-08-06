@@ -17,6 +17,7 @@ router.get("/postById/:id", async (req, res) => {
 //setting up a multer to handle the image
 const path = require('path');
 const multer = require("multer");
+const Users = require("../models/Users");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -72,7 +73,6 @@ router.put('/updatePost/:id',upload.single('image'), async (req, res) => {
   }
 });
 
-
 router.delete("/:postId",validateToken, async (req, res) => {
   const postId = req.params.postId;
   await Posts.destroy({
@@ -83,7 +83,5 @@ router.delete("/:postId",validateToken, async (req, res) => {
 
   res.json("DELETED SUCCESSFULLY");
 });
-
-
 
 module.exports = router;
