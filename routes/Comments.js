@@ -9,6 +9,11 @@ router.get("/:postId", async (req, res) => {
   res.json(comments);
 });
 
+router.get("/", async (req, res) => {
+  const listOfComments = await Comments.findAll();
+  res.json(listOfComments);
+});
+
 router.post("/", validateToken, async (req, res) => {
   const comment = req.body;
   const username = req.user.username;    //storing username

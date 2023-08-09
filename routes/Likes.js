@@ -21,4 +21,10 @@ router.post("/", validateToken, async (req, res) => {
   }
 });
 
+router.get("/listOfLikes", async (req, res) => {
+  const listOfLikes = await Likes.findAll();
+  res.json(listOfLikes);
+});
+
+
 module.exports = router;
