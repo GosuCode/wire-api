@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
 
   try {
     // Check if the user already exists in the database
-    const existingUser = await Users.findOne({ where: { username } });
+    const existingUser = await Users.findOne({ where: { email } });
     if (existingUser) {
       // User already exists, send a failure response
       return res.status(400).json({ message: "User already exists" });
@@ -35,11 +35,11 @@ router.post("/", async (req, res) => {
 
 
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    // Find the user with the provided username in the database
-    const user = await Users.findOne({ where: { username: username } });
+    // Find the user with the provided email in the database
+    const user = await Users.findOne({ where: { email: email } });
 
     if (!user) {
       // If user not found, send an error response
