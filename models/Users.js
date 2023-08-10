@@ -1,3 +1,4 @@
+
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define("Users", {
     username: {
@@ -17,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
 
   Users.associate = (models) => {
     Users.hasMany(models.Likes, {
+      onDelete: "cascade",
+    });
+    Users.hasMany(models.Bookmarks, {
       onDelete: "cascade",
     });
 
