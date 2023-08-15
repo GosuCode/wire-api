@@ -22,9 +22,13 @@ router.post("/", validateToken, async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/",
+// validateToken,
+ async (req, res) => {
+  // const UserId = req.user.id;
   try {
     const bookmarks = await Bookmarks.findAll({
+      // where: {UserId: UserId},
       include: [
         {
           model: Posts,

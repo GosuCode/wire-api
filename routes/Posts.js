@@ -32,7 +32,7 @@ const upload = multer({
     storage: storage,
     limits : { fileSize: 5000000 },    //image file size limit 5MB
     fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png|gif/;     //file type that are accepted
+        const filetypes = /jpeg|jpg|png/;     //file type that are accepted
         const mimeType = filetypes.test(file.mimetype);   //check if the file type is accepted
         const extname = filetypes.test(path.extname(file.originalname));   //check if the file type is accepted
         //if mimeType = extname upload

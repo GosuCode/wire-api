@@ -55,13 +55,20 @@ router.post("/login", async (req, res) => {
 
       // If passwords match, generate an access token
       const accessToken = sign(
-        { username: user.username, id: user.id },
+        { username: user.username, id: user.id, email: user.email, createdAt: user.createdAt  },
         "KimetsuNoYaiba"
         // , {expiresIn: '10m'}
       );
 
       // Send the access token and user details in the response
-      res.json({ token: accessToken, username: user.username, id: user.id });
+      res.json({
+        token: accessToken,
+        username: user.username,
+        id: user.id,
+        email: user.email,
+        createdAt: user.createdAt,
+      });
+
     });
   } catch (error) {
     // Handle any errors that occur during the process
@@ -77,6 +84,17 @@ router.get("/user", validateToken, (req, res) => {
 router.get("/listOfUsers", async (req, res) => {
   const listOfUsers = await Users.findAll();  //joining posts and likes table
   res.json(listOfUsers);
+});
+
+router.delete("/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  await Users.destroy({
+    where: {
+      id: userId,
+    },
+  });
+
+  res.json("DELETED SUCCESSFULLY");
 });
 
 
