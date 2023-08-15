@@ -86,6 +86,12 @@ router.get("/listOfUsers", async (req, res) => {
   res.json(listOfUsers);
 });
 
+router.get("/userById/:id", async (req, res) => {
+  const id = req.params.id;
+  const user = await Users.findByPk(id);
+  res.json(user);
+});
+
 router.delete("/:userId", async (req, res) => {
   const userId = req.params.userId;
   await Users.destroy({
