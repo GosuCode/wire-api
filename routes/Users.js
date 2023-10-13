@@ -56,7 +56,7 @@ router.post("/login", async (req, res) => {
       // If passwords match, generate an access token
       const accessToken = sign(
         { username: user.username, id: user.id, email: user.email, createdAt: user.createdAt  },
-        "KimetsuNoYaiba"
+        process.env.SECRET_KEY
         // , {expiresIn: '10m'}
       );
 

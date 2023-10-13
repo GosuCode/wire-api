@@ -4,13 +4,14 @@
 //if the user is not logged in then res.json({error: "User not logged in!"}
 const { verify } = require("jsonwebtoken");
 
+const secretKey = process.env.SECRET_KEY
 const validateToken = (req, res, next) => {
   const accessToken = req.header("accessToken");
 
   if (!accessToken) return res.json({ error: "User not logged in!" });
 
   try {
-    const validToken = verify(accessToken, "KimetsuNoYaiba");
+    const validToken = verify(accessToken, secretKey);
     req.user = validToken;
     if (validToken) {
       return next();
